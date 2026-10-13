@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Student Sampling Tool</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.cell{
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.selected{
+    background: gold;
+    font-weight: bold;
+}
+
+button{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#result{
+    margin-top: 20px;
+    font-size: 18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Student Sampling Tool</h1>
+
+<p>
+Click the button to randomly select a sample of 3 values from the population.
+</p>
+
+<div id="grid" class="grid"></div>
+
+<button onclick="drawSample()">Take Sample (n = 3)</button>
+
+<div id="result"></div>
+
+<script>
+
+const population = [
+    3,5,7,12,7,
+    5,7,9,5,9,
+    7,9,12,7,5,
+    9,12,5,9,7,
+    12,3,7,12,7,
+    3,5,9,5,7
+];
+
+const grid = document.getElementById("grid");
+
+population.forEach((value, index) => {
+
+    const div = document.createElement("div");
+
+    div.className = "cell";
+    div.id = "cell" + index;
+    div.innerText = value;
+
+    grid.appendChild(div);
+});
+
+function drawSample() {
+
+    document.querySelectorAll(".cell")
+        .forEach(cell => cell.classList.remove("selected"));
+
+    let indices = [];
+
+    while(indices.length < 3){
+
+        let randomIndex =
+            Math.floor(Math.random() * population.length);
+
+        if(!indices.includes(randomIndex)){
+            indices.push(randomIndex);
+        }
+    }
+
+    const sampleValues =
+        indices.map(i => population[i]);
+
+    indices.forEach(i => {
+
+        document.getElementById("cell" + i)
+            .classList.add("selected");
+    });
+
+    document.getElementById("result").innerHTML =
+        "<h3>Your Sample</h3>" +
+        "<p>" + sampleValues.join(", ") + "</p>" +
+        "<p><em>Record these values in your Excel tutorial workbook and use the =AVERAGE() function to calculate the sample mean.</em></p>";
+}
+
+</script>
+
+</body>
+
+</html>
